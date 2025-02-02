@@ -9,7 +9,6 @@ current_api_key = os.getenv("NOPECHA_API_KEY", "")
 def solve_image(image):
     load_dotenv()
     status = nopecha.Balance.get()
-    print(status)
     if status['credit'] == 0 or status['status'] == 'Expired':
         remove_api_key(current_api_key)
         regenerate_env_api_key()
@@ -21,6 +20,5 @@ def solve_image(image):
     print(response)
     if response and isinstance(response, dict) and "data" in response and response["data"]:
         captcha_solution = response["data"][0]
-        print(f"✅ CAPTCHA Solved: {captcha_solution}")
         return captcha_solution
 

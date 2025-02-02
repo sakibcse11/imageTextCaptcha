@@ -12,7 +12,6 @@ async def solve_captcha(image_request: ImageRequest):
         raise HTTPException(status_code=404, detail="Invalid key.")
     try:
         # Pass the base64 image string to the NopeCHA service
-        print(image_request.base64_image)
         solution = solve_image(image_request.base64_image)
         return ImageResponse(solution=solution)
     except Exception as e:

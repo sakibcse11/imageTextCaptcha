@@ -55,5 +55,4 @@ def check_status(api_key = "23u6q79gd11xje0j"):
     client = RequestsAPIClient(api_key)
     status = client.status()
     return status
-print(check_status())
 
