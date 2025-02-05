@@ -53,7 +53,7 @@ def active_api_key():
                 active_key = api_key
     return active_key
 
-def regenerate_env_api_key():
+def regenerate_active_api_key():
     active_key = active_api_key()
     if active_key:
         # Read and update the .env file
@@ -70,5 +70,6 @@ def regenerate_env_api_key():
         print("Replacement done!")
     else:
         print("No active API key found.")
+
 
 

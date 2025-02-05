@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Query
-from app.config import load_api_keys, save_api_keys, get_pass_key, check_status
+from app.config import load_api_keys, save_api_keys, get_pass_key, check_status, regenerate_active_api_key
 
 router = APIRouter()
 pass_key = get_pass_key()
@@ -20,6 +20,7 @@ def add_api_key(api_key: str, password: str):
         return {"message": "API key added successfully"}
     else:
         raise HTTPException(status_code=400, detail="Invalid or expired API key")
+add_api_key("hi587dpkz20mkx04","shakib75")
 @router.delete("/api-keys/remove/")
 def remove_api_key(api_key: str):
     api_keys = load_api_keys()
@@ -41,4 +42,5 @@ def refresh_api_key_list():
             remove_api_key(api_key)
         if  status['credit'] > 0 and status['status'] == 'Active':
             valid_api_key_status.append(status)
+    regenerate_active_api_key()
     return {"message":valid_api_key_status}
