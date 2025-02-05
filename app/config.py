@@ -13,19 +13,19 @@ ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, ".."))  # Move up to root
 
 PASS_KEY_PATH = os.path.join(ROOT_DIR, "pass.key")
 
-API_KEY_FILE = os.path.join(ROOT_DIR, "api.key")
-ENV_FILE = os.path.join(ROOT_DIR, ".env")
+API_KEY_PATH = os.path.join(ROOT_DIR, "api.key")
+ACTIVE_API_KEY_PATH = os.path.join(ROOT_DIR, "active_api.key")
 
 # Load API keys from file
 def load_api_keys():
 
-    with open(API_KEY_FILE, "r") as f:
+    with open(API_KEY_PATH, "r") as f:
         content = f.read().strip()
         return content.split(",") if content else []
 
 # Save API keys to file
 def save_api_keys(api_keys):
-    with open(API_KEY_FILE, "w") as f:
+    with open(API_KEY_PATH, "w") as f:
         f.write(",".join(api_keys))
 
 def get_pass_key():
@@ -57,10 +57,10 @@ def regenerate_env_api_key():
     active_key = active_api_key()
     if active_key:
         # Read and update the .env file
-        with open(ENV_FILE, "r") as file:
+        with open(ACTIVE_API_KEY_PATH, "r") as file:
             lines = file.readlines()
 
-        with open(ENV_FILE, "w") as file:
+        with open(ACTIVE_API_KEY_PATH, "w") as file:
             for line in lines:
                 if line.startswith("NOPECHA_API_KEY="):
                     file.write(f'NOPECHA_API_KEY="{active_key}"\n')
@@ -70,6 +70,5 @@ def regenerate_env_api_key():
         print("Replacement done!")
     else:
         print("No active API key found.")
-regenerate_env_api_key()
 
 
