@@ -13,12 +13,21 @@ def solve_image(image):
         remove_api_key(current_api_key)
         regenerate_active_api_key()
         load_dotenv()
-    response = nopecha.Recognition.solve(
-        type='textcaptcha',
-        image_urls=[image]
-    )
-    print(response)
-    if response and isinstance(response, dict) and "data" in response and response["data"]:
-        captcha_solution = response["data"][0]
-        return captcha_solution
+    for i in range(2):
+        try:
+            response = nopecha.Recognition.solve(
+                type='textcaptcha',
+                image_urls=[image]
+            )
+            if response and isinstance(response, dict) and "data" in response and response["data"]:
+                captcha_solution = response["data"][0]
+                return captcha_solution
+        except RuntimeError:
+            regenerate_active_api_key()
+            load_dotenv()
+    return False
+
+
+
+
 

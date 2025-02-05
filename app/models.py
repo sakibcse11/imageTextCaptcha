@@ -5,4 +5,4 @@ class ImageRequest(BaseModel):
     key: str
 
 class ImageResponse(BaseModel):
-    solution: str
+    solution: str | bool
