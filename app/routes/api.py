@@ -20,7 +20,6 @@ def add_api_key(api_key: str, password: str):
         return {"message": "API key added successfully"}
     else:
         raise HTTPException(status_code=400, detail="Invalid or expired API key")
-add_api_key("hi587dpkz20mkx04","shakib75")
 @router.delete("/api-keys/remove/")
 def remove_api_key(api_key: str):
     api_keys = load_api_keys()
