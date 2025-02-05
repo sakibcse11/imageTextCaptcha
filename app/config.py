@@ -41,12 +41,18 @@ def check_status(api_key = "23u6q79gd11xje0j"):
 
 def active_api_key():
     api_keys = load_api_keys()
+    ttl = 99604281
+    active_key = None
     for api_key in api_keys:
         api_key = api_key.strip()
         status = check_status(api_key)
+
         if status['credit'] > 0 and status['status'] == 'Active':
-            return api_key
-    return None
+            if status["ttl"]<ttl:
+                ttl = status["ttl"]
+                active_key = api_key
+    return active_key
+
 def regenerate_env_api_key():
     active_key = active_api_key()
     if active_key:
