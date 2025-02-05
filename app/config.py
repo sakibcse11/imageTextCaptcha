@@ -63,7 +63,7 @@ def regenerate_active_api_key():
         with open(DOT_ENV_PATH, "w") as file:
             for line in lines:
                 if line.startswith("NOPECHA_API_KEY="):
-                    file.write(f'NOPECHA_API_KEY="{active_key}"\n')
+                    file.write(f'NOPECHA_API_KEY = "{active_key}"\n')
                 else:
                     file.write(line)
 

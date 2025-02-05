@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 import nopecha
 
-from app.config import regenerate_env_api_key
+from app.config import regenerate_active_api_key
 from app.routes.api import remove_api_key
 
 current_api_key = os.getenv("NOPECHA_API_KEY", "")
@@ -11,7 +11,7 @@ def solve_image(image):
     status = nopecha.Balance.get()
     if status['credit'] == 0 or status['status'] == 'Expired':
         remove_api_key(current_api_key)
-        regenerate_env_api_key()
+        regenerate_active_api_key()
         load_dotenv()
     response = nopecha.Recognition.solve(
         type='textcaptcha',
