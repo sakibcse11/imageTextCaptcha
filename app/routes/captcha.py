@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException
 from app.config import get_pass_key
 from app.models import ImageRequest, ImageResponse
 from app.services.nopecha_service import solve_image
-
+import nopecha
 router = APIRouter()
 
 @router.post("/solve", response_model=ImageResponse)
@@ -16,3 +16,8 @@ async def solve_captcha(image_request: ImageRequest):
         return ImageResponse(solution=solution)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+@router.get("/current_status")
+async def status():
+    stat = nopecha.Balance.get()
+    return {"status": stat}
