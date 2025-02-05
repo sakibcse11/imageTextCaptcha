@@ -1,3 +1,5 @@
+import asyncio
+
 from fastapi import APIRouter, HTTPException
 
 from app.config import get_pass_key
@@ -19,5 +21,8 @@ async def solve_captcha(image_request: ImageRequest):
 
 @router.get("/current_status")
 async def status():
-    stat = nopecha.Balance.get()
-    return {"status": stat}
+    try:
+        stat = await asyncio.wait_for(asyncio.to_thread(nopecha.Balance.get), timeout=5)
+        return {"status": stat}
+    except asyncio.TimeoutError:
+        return {"error": "NopeCHA API timeout"}

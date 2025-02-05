@@ -6,7 +6,7 @@ from nopecha.api.requests import RequestsAPIClient
 
 load_dotenv()
 
-API_KEY_FILE = "api.key"
+API_KEY_FILE = "../api.key"
 
 # Load API keys from file
 def load_api_keys():
@@ -22,9 +22,16 @@ def save_api_keys(api_keys):
         f.write(",".join(api_keys))
 
 def get_pass_key():
-    with open("pass.key", "r") as f:
+    with open("../pass.key", "r") as f:
         pass_key = f.read().strip()
         return pass_key
+
+def check_status(api_key = "23u6q79gd11xje0j"):
+    client = RequestsAPIClient(api_key)
+    status = client.status()
+    return status
+
+
 def active_api_key():
     api_keys = load_api_keys()
     for api_key in api_keys:
@@ -37,10 +44,10 @@ def regenerate_env_api_key():
     active_key = active_api_key()
     if active_key:
         # Read and update the .env file
-        with open(".env", "r") as file:
+        with open("../.env", "r") as file:
             lines = file.readlines()
 
-        with open(".env", "w") as file:
+        with open("../.env", "w") as file:
             for line in lines:
                 if line.startswith("NOPECHA_API_KEY="):
                     file.write(f'NOPECHA_API_KEY="{active_key}"\n')
@@ -51,8 +58,4 @@ def regenerate_env_api_key():
     else:
         print("No active API key found.")
 
-def check_status(api_key = "23u6q79gd11xje0j"):
-    client = RequestsAPIClient(api_key)
-    status = client.status()
-    return status
 
