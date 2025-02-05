@@ -1,9 +1,10 @@
 import asyncio
+import os
 
 from dotenv import load_dotenv
 from fastapi import APIRouter, HTTPException
 
-from app.config import get_pass_key, DOT_ENV_PATH
+from app.config import get_pass_key, DOT_ENV_PATH, get_fresh_client
 from app.models import ImageRequest, ImageResponse
 from app.services.nopecha_service import solve_image
 import nopecha
@@ -22,9 +23,9 @@ async def solve_captcha(image_request: ImageRequest):
 
 @router.get("/current_status")
 async def status():
-    load_dotenv(dotenv_path=DOT_ENV_PATH,override=True)
+    client = get_fresh_client()
     try:
-        stat = await asyncio.wait_for(asyncio.to_thread(nopecha.Balance.get), timeout=5)
-        return {"status": stat}
-    except asyncio.TimeoutError:
-        return {"error": "NopeCHA API timeout"}
+        stat = client.status()
+        return {"status": stat, "current_key": client.key}
+    except Exception as e:
+        return {"error": str(e)}

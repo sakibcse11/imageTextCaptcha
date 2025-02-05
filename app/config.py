@@ -1,11 +1,9 @@
-from dotenv import load_dotenv
 import os
-import nopecha
-from nopecha.api.requests import RequestsAPIClient
-
+from dotenv import load_dotenv
+from nopecha.api.urllib import UrllibAPIClient
 
 load_dotenv()
-import os
+
 
 # Get the absolute path of the project's root directory
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Current file's directory
@@ -33,27 +31,40 @@ def get_pass_key():
         pass_key = f.read().strip()
         return pass_key
 
-def check_status(api_key = "23u6q79gd11xje0j"):
-    client = RequestsAPIClient(api_key)
-    status = client.status()
-    return status
+def get_fresh_client():
+    """Get a fresh API client with current key"""
+    load_dotenv(dotenv_path=DOT_ENV_PATH, override=True)
+    current_api_key = os.getenv("NOPECHA_API_KEY", "")
+    return UrllibAPIClient(current_api_key)
+
+def check_status(api_key):
+    """Check status with direct client"""
+    client = UrllibAPIClient(api_key)
+    try:
+        return client.status()
+    except Exception as e:
+        print(f"Error checking status for key {api_key}: {str(e)}")
+        return {"credit": 0, "status": "Error", "ttl": 0}
 
 
 def active_api_key():
+    """Find the best API key using direct client"""
     api_keys = load_api_keys()
     ttl = 99604281
     active_key = None
+
     for api_key in api_keys:
         api_key = api_key.strip()
         status = check_status(api_key)
 
         if status['credit'] > 0 and status['status'] == 'Active':
-            if status["ttl"]<ttl:
+            if status["ttl"] < ttl:
                 ttl = status["ttl"]
                 active_key = api_key
     return active_key
 
 def regenerate_active_api_key():
+    """Update active key using direct client approach"""
     active_key = active_api_key()
     if active_key:
         # Read and update the .env file
@@ -66,12 +77,28 @@ def regenerate_active_api_key():
                     file.write(f'NOPECHA_API_KEY = "{active_key}"\n')
                 else:
                     file.write(line)
-        load_dotenv(dotenv_path=DOT_ENV_PATH,override=True)
-        # new_api_key = os.getenv("NOPECHA_API_KEY")
-        print(f"API key updated successfully")
 
+        # Force reload environment
+        load_dotenv(dotenv_path=DOT_ENV_PATH, override=True)
+
+        # Verify with new client
+        client = get_fresh_client()
+        status = client.status()
+        print(f"Regenerated key status: {status}")
+        return True
     else:
         print("No active API key found.")
+        return False
+
+
+
+
+
+
+
+
+
+
 
 
 
