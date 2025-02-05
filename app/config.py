@@ -66,8 +66,9 @@ def regenerate_active_api_key():
                     file.write(f'NOPECHA_API_KEY = "{active_key}"\n')
                 else:
                     file.write(line)
-
-        print("Replacement done!")
+        load_dotenv(dotenv_path=DOT_ENV_PATH,override=True)
+        # new_api_key = os.getenv("NOPECHA_API_KEY")
+        print(f"API key updated successfully")
 
     else:
         print("No active API key found.")

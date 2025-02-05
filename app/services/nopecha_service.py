@@ -5,14 +5,14 @@ import nopecha
 from app.config import regenerate_active_api_key
 from app.routes.api import remove_api_key
 
-current_api_key = os.getenv("NOPECHA_API_KEY", "")
 def solve_image(image):
-    load_dotenv()
+    load_dotenv(override=True)
+    current_api_key = os.getenv("NOPECHA_API_KEY", "")
     status = nopecha.Balance.get()
+    print(status)
     if status['credit'] == 0 or status['status'] == 'Expired':
         remove_api_key(current_api_key)
         regenerate_active_api_key()
-        load_dotenv()
     for i in range(2):
         try:
             response = nopecha.Recognition.solve(
@@ -24,7 +24,6 @@ def solve_image(image):
                 return captcha_solution
         except RuntimeError:
             regenerate_active_api_key()
-            load_dotenv()
     return False
 
 
