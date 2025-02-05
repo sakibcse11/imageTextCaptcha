@@ -20,7 +20,6 @@ def add_api_key(api_key: str, password: str):
         return {"message": "API key added successfully"}
     else:
         raise HTTPException(status_code=400, detail="Invalid or expired API key")
-
 @router.delete("/api-keys/remove/")
 def remove_api_key(api_key: str):
     api_keys = load_api_keys()
@@ -33,6 +32,8 @@ def remove_api_key(api_key: str):
 @router.get("/api-keys/refresh/")
 def refresh_api_key_list():
     api_keys = load_api_keys()
+    if not api_keys:
+        return {"message": "API key not found"}
     valid_api_key_status = []
     for api_key in api_keys:
         status = check_status(api_key)
