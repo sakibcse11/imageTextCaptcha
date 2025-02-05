@@ -23,9 +23,8 @@ def add_api_key(api_key: str, password: str):
 @router.delete("/api-keys/remove/")
 def remove_api_key(api_key: str):
     api_keys = load_api_keys()
-    if api_key not in api_keys:
-        raise HTTPException(status_code=404, detail="API key not found")
-    api_keys.remove(api_key)
+    if api_key in api_keys:
+        api_keys.remove(api_key)
     save_api_keys(api_keys)
     return {"message": "API key removed successfully"}
 
