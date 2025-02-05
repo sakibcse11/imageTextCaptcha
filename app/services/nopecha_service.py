@@ -12,7 +12,6 @@ def solve_image(image):
     print(status)
     if status['credit'] == 0 or status['status'] == 'Expired':
         remove_api_key(current_api_key)
-        regenerate_active_api_key()
     for i in range(2):
         try:
             response = nopecha.Recognition.solve(

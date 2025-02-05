@@ -17,6 +17,7 @@ def add_api_key(api_key: str, password: str):
     if status['credit'] > 0 and status['status'] == 'Active':
         api_keys.append(api_key)
         save_api_keys(api_keys)
+        regenerate_active_api_key()
         return {"message": "API key added successfully"}
     else:
         raise HTTPException(status_code=400, detail="Invalid or expired API key")
@@ -26,6 +27,7 @@ def remove_api_key(api_key: str):
     if api_key in api_keys:
         api_keys.remove(api_key)
     save_api_keys(api_keys)
+    regenerate_active_api_key()
     return {"message": "API key removed successfully"}
 
 @router.get("/api-keys/refresh/")
