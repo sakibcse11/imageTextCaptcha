@@ -1,5 +1,5 @@
 import os
-from app.config import regenerate_active_api_key, DOT_ENV_PATH, get_fresh_client
+from app.config import regenerate_active_api_key, get_fresh_client
 from app.routes.api import remove_api_key
 
 from nopecha.api.types import RecognitionRequest
@@ -36,4 +36,3 @@ def solve_image(image):
             regenerate_active_api_key()
             client = get_fresh_client()
             print(f"New key after regeneration: {client.key}")
-    return False
