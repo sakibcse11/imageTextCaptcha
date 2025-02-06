@@ -1,3 +1,5 @@
+import typing
+
 from pydantic import BaseModel
 
 class ImageRequest(BaseModel):
@@ -5,4 +7,4 @@ class ImageRequest(BaseModel):
     key: str
 
 class ImageResponse(BaseModel):
-    solution: str
+    solution: str | typing.Any

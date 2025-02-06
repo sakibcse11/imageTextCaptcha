@@ -29,6 +29,7 @@ def solve_image(image):
             }
             # Use client directly
             response = client.recognize_raw(typing.cast(RecognitionRequest, request))
+            print(f"response: {response}")
             if response and isinstance(response, dict) and "data" in response and response["data"]:
                 captcha_solution = response["data"][0]
                 return captcha_solution

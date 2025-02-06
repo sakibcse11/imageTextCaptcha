@@ -87,8 +87,7 @@ def regenerate_active_api_key():
         print(f"Regenerated key status: {status}")
         return True
     else:
-        print("No active API key found.")
-        return False
+        raise Exception("No active key found")
 
 
 
